@@ -1,0 +1,56 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "ScenePaths",
+"language": "GDScript",
+"path": "res://src/script_classes/models/ScenePaths.gd"
+}, {
+"base": "Reference",
+"class": "Window",
+"language": "GDScript",
+"path": "res://src/script_classes/Window.gd"
+} ]
+_global_script_class_icons={
+"ScenePaths": "",
+"Window": ""
+}
+
+[application]
+
+config/name="Ludum Dare 47"
+run/main_scene="res://scenes/Init.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://scenes/Global.tscn"
+
+[debug]
+
+gdscript/warnings/enable=false
+
+[display]
+
+window/size/width=256
+window/size/height=144
+window/size/resizable=false
+window/size/test_width=1024
+window/size/test_height=576
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
+[rendering]
+
+quality/intended_usage/framebuffer_allocation=0
+quality/intended_usage/framebuffer_allocation.mobile=0
+quality/2d/use_pixel_snap=true
+environment/default_environment="res://default_env.tres"
