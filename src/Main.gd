@@ -21,11 +21,11 @@ func _on_enemy_spawn_timer_timeout() -> void:
     player.connect("turbo_loop_enclosed", enemy_instance, "_on_Player_loop_enclosed")
     enemy_instance.player = player
     var pos_value := 64
-    var rand_position := Vector2(64, 64)
-    var x_rand := randi() % 2
+    var rand_position := Vector2(128, 64)
+#    var x_rand := randi() % 2
     var y_rand := randi() % 2
-    if x_rand == 1:
-        rand_position.x *= -1
+#    if x_rand == 1:
+#        rand_position.x *= -1
     if y_rand == 1:
         rand_position.y *= -1
     enemy_instance.position = player.position + rand_position

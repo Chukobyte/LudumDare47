@@ -17,6 +17,7 @@ var chase_state_timer := SimpleTimer.new(2.0)
 var death_state_timer := SimpleTimer.new(1.0)
 
 onready var animated_sprite : AnimatedSprite = $AnimatedSprite
+onready var collision_shape : CollisionShape2D = $CollisionShape2D
 
 var max_speed := 90
 var acceleration := 15
@@ -80,7 +81,7 @@ func _process(delta : float) -> void:
         animated_sprite.play(animation_move_right)
     elif velocity.x < 0:
         animated_sprite.play(animation_move_right)
-    if velocity.y > 0:
+    elif velocity.y > 0:
         animated_sprite.play(animation_move_down)
     elif velocity.y < 0:
         animated_sprite.play(animation_move_up)
@@ -94,10 +95,10 @@ func _physics_process(delta) -> void:
             if distance <= CHASE_DISTANCE_THRESHOLD:
                 dir = -dir
         STATE.CHASE:
-            current_max_speed += 25
+            current_max_speed += 35
         STATE.DEATH:
             velocity = Vector2()
-            rotation_degrees += 5
+            rotation_degrees += 15
     velocity.x = clamp(velocity.x + (dir.x * acceleration), -current_max_speed, current_max_speed)
     velocity.y = clamp(velocity.y + (dir.y * acceleration), -current_max_speed, current_max_speed)
 #        match randi() % 4:
@@ -109,7 +110,13 @@ func _physics_process(delta) -> void:
 #                velocity.y -= 5
 #            3:
 #                velocity.y += 5
-    velocity = move_and_slide(velocity)
+#    velocity = move_and_slide(velocity)
+    var kinematicbody_collision : KinematicCollision2D = move_and_collide(velocity * delta)
+    if kinematicbody_collision:
+        velocity = velocity.bounce(kinematicbody_collision.normal)
+#        velocity = kinematicbody_collision.remainder
+    position.x = clamp(position.x, 0, 99999999)
+    position.y = clamp(position.y, 0, 200)
 
 func _on_follow_state_timer_timeout() -> void:
     state = STATE.CHASE
@@ -133,6 +140,7 @@ func _on_Player_loop_enclosed() -> void:
     if player_has_circled:
         emit_signal("destroyed")
         state = STATE.DEATH
+        collision_shape.call_deferred("set_disabled", true)
         death_state_timer.start()
         player_has_circled = false
         angle_x_max = false

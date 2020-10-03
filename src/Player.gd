@@ -46,10 +46,19 @@ func _process(delta : float) -> void:
             turbo_trail.call_deferred("queue_free")
 
 func _physics_process(delta : float):
-    _update_velocity_from_input()
-    velocity = move_and_slide(velocity, UP_DIRECTION)
+    velocity = _get_velocity_from_input()
+#    velocity = move_and_slide(velocity, UP_DIRECTION)
+    var collision := move_and_collide(velocity * delta)
+    if collision:
+#        var dir := collision.position.direction_to(position)
+#        velocity.x += dir.x * 20 *  delta
+#        velocity.y += dir.y * 20 *  delta
+        velocity = velocity.bounce(collision.normal) * Vector2(1.2, 1.2)
+    position.x = clamp(position.x, 0, 99999999)
+    position.y = clamp(position.y, 0, 200)
 
-func _update_velocity_from_input() -> void:
+func _get_velocity_from_input() -> Vector2:
+    var input_velocity := Vector2()
     var movement_acceleration := acceleration
     var movement_max_speed := max_speed
     if has_turbo:
@@ -57,22 +66,23 @@ func _update_velocity_from_input() -> void:
         movement_max_speed *= 2.5
 
     if Input.is_action_pressed("ui_move_right"):
-        velocity.x = min(velocity.x + movement_acceleration, movement_max_speed)
+        input_velocity.x = min(velocity.x + movement_acceleration, movement_max_speed)
         animated_sprite.play(animation_move_right)
     elif Input.is_action_pressed("ui_move_left"):
-        velocity.x = max(velocity.x - movement_acceleration, -movement_max_speed)
+        input_velocity.x = max(velocity.x - movement_acceleration, -movement_max_speed)
         animated_sprite.play(animation_move_left)
     else :
-        velocity.x = lerp(velocity.x, 0, deceleration.x)
+        input_velocity.x = lerp(velocity.x, 0, deceleration.x)
 
     if Input.is_action_pressed("ui_move_down"):
-        velocity.y = min(velocity.y + movement_acceleration, movement_max_speed)
+        input_velocity.y = min(velocity.y + movement_acceleration, movement_max_speed)
         animated_sprite.play(animation_move_down)
     elif Input.is_action_pressed("ui_move_up"):
-        velocity.y = max(velocity.y - movement_acceleration, -movement_max_speed)
+        input_velocity.y = max(velocity.y - movement_acceleration, -movement_max_speed)
         animated_sprite.play(animation_move_up)
     else:
-        velocity.y = lerp(velocity.y, 0, deceleration.y)
+        input_velocity.y = lerp(velocity.y, 0, deceleration.y)
+    return input_velocity
 
 func _on_turbo_trail_spawn_timer_timeout() -> void:
     if has_turbo:
