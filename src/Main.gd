@@ -2,19 +2,15 @@
 extends Node2D
 
 const ENEMY_PACKAGED_SCENE := preload("res://scenes/Enemy.tscn")
-const ENEMIES_TO_SPAWN := 20
+const ENEMIES_TO_SPAWN := 10
 var spawned_enemies := 0
-var enemy_spawn_timer := SimpleTimer.new(2.0)
+var enemy_spawn_timer := SimpleTimer.new(1.0)
 
 onready var player : KinematicBody2D = $Player
-onready var enemy : KinematicBody2D = $Enemy
 
 
 func _ready() -> void:
     enemy_spawn_timer.connect("timeout", self, "_on_enemy_spawn_timer_timeout")
-    player.connect("turbo_triggered", enemy, "_on_Player_turbo_triggered")
-    player.connect("turbo_loop_enclosed", enemy, "_on_Player_loop_enclosed")
-    enemy.player = player
     add_child(enemy_spawn_timer)
     enemy_spawn_timer.start()
 

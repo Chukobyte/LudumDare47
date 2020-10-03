@@ -17,8 +17,8 @@ var animation_move_up := "MoveUp"
 var animation_move_left := "MoveLeft"
 var animation_move_right := "MoveRight"
 
-#var turbo_trail_spawn_timer := SimpleTimer.new(0.02)
-var turbo_trail_spawn_timer := SimpleTimer.new(0.1)
+var turbo_trail_spawn_timer := SimpleTimer.new(0.02)
+#var turbo_trail_spawn_timer := SimpleTimer.new(0.005)
 var turbo_trail_positions := PoolVector2Array()
 
 onready var animated_sprite : AnimatedSprite = $AnimatedSprite
@@ -96,9 +96,9 @@ func _on_TurboTrail_enclosed(position_connected : int) -> void:
 #    if !turbo_trail_positions.empty():
 #        for i in position_connected:
 #            turbo_trail_positions.remove(i)
-#    if turbo_trail_positions.size() >= 3:
-#        var turbo_damage_area := TurboDamageArea.new(turbo_trail_positions, position_connected)
-#        get_tree().get_current_scene().add_child(turbo_damage_area)
+    if turbo_trail_positions.size() >= 3:
+        var turbo_damage_area := TurboDamageArea.new(turbo_trail_positions, position_connected)
+        get_tree().get_current_scene().add_child(turbo_damage_area)
     emit_signal("turbo_loop_enclosed")
     turbo_trail_positions.resize(0)
-    turbo_trail_spawn_timer.stop()
+#    turbo_trail_spawn_timer.stop()
