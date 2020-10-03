@@ -25,7 +25,6 @@ func _on_Area2D_body_entered(body : Node) -> void:
     if body.get_name() == "Player":
         emit_signal("enclosed", position_array_index)
         collision.call_deferred("set_disabled", true)
-        print("trail entered")
 
 func _on_life_timer_timeout() -> void:
     queue_free()

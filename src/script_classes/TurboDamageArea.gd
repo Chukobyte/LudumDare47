@@ -7,7 +7,11 @@ var collision := CollisionPolygon2D.new()
 var life_timer := SimpleTimer.new(0.2)
 
 
-func _init(polygon : PoolVector2Array):
+func _init(polygon : PoolVector2Array, polygon_connected_index : int):
+#    print("Turbo Damage area connected index = %s" % str(polygon_connected_index))
+#    for i in range(polygon_connected_index):
+#        print("removed = %s" % polygon[i])
+#        polygon.remove(i)
     collision.polygon = polygon
     collision.visible = true
 
