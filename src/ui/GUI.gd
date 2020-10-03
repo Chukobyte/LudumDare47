@@ -1,0 +1,3 @@
+# GUI.gd
+extends CanvasLayer
+

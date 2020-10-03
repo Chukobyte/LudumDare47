@@ -57,6 +57,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://scenes/Global.tscn"
+Gui="*res://scenes/ui/GUI.tscn"
 
 [debug]
 
