@@ -17,7 +17,7 @@ func _ready() -> void:
     collision_enable_timer.connect("timeout", self, "_on_collision_enable_timer_timeout")
     add_child(life_timer)
     add_child(collision_enable_timer)
-    life_timer.start()
+#    life_timer.start()
     collision_enable_timer.start()
     collision.disabled = true
 

@@ -6,7 +6,7 @@ const TURBO_TRAIL_PACKED_SCENE := preload("res://scenes/TurboTrail.tscn")
 
 var max_speed := 90
 var acceleration := 15
-var deceleration := Vector2(0.15, 0.15)
+var deceleration := Vector2(0.05, 0.05)
 var velocity := Vector2(0, 0)
 
 var animation_move_down := "MoveDown"
@@ -14,7 +14,8 @@ var animation_move_up := "MoveUp"
 var animation_move_left := "MoveLeft"
 var animation_move_right := "MoveRight"
 
-var turbo_trail_spawn_timer := SimpleTimer.new(0.02)
+#var turbo_trail_spawn_timer := SimpleTimer.new(0.02)
+var turbo_trail_spawn_timer := SimpleTimer.new(0.05)
 var turbo_trail_positions := PoolVector2Array()
 
 onready var animated_sprite : AnimatedSprite = $AnimatedSprite
@@ -36,6 +37,8 @@ func _process(delta : float) -> void:
     if Input.is_action_just_released("ui_turbo"):
         has_turbo = false
         turbo_trail_positions.resize(0)
+        for turbo_trail in get_tree().get_nodes_in_group(GroupId.TURBO_TRAILS):
+            turbo_trail.call_deferred("queue_free")
 
 func _physics_process(delta : float):
     _update_velocity_from_input()
@@ -81,7 +84,8 @@ func _on_TurboTrail_enclosed(position_connected : int) -> void:
             turbo_trail_positions.remove(i)
     for turbo_trail in get_tree().get_nodes_in_group(GroupId.TURBO_TRAILS):
         turbo_trail.call_deferred("queue_free")
-    var turbo_damage_area := TurboDamageArea.new(turbo_trail_positions)
-    get_tree().get_current_scene().add_child(turbo_damage_area)
+    if turbo_trail_positions.size() >= 3:
+        var turbo_damage_area := TurboDamageArea.new(turbo_trail_positions)
+        get_tree().get_current_scene().add_child(turbo_damage_area)
     turbo_trail_positions.resize(0)
     turbo_trail_spawn_timer.stop()
